@@ -9,9 +9,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -39,11 +36,35 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-											<li class="nav-item">
+											@guest
+											
+											@else
+
+											<li class="nav-item dropdown">
+												<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+													User & Level Akses
+												</a>
+												<div class="dropdown-menu">
+													<a href="{{ route('role.index') }}" class="dropdown-item">Management Role</a>
+													<a href="{{ route('user.index') }}" class="dropdown-item">Management User</a>
+												</div>
+											</li>
+
+											<li class="nav-item dropdown">
+												<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+													Master Data
+												</a>
+												<div class="dropdown-menu">
+													<a href="{{ route('units.index') }}" class="dropdown-item">Data Satuan</a>
+													<div class="dropdown-divider"></div>
+												</div>
+											</li>
+											{{-- <li class="nav-item">
 												<a href="{{ route('role.index') }}" class="nav-link">
 													Management Role
 												</a>
-											</li>
+											</li> --}}
+											@endguest
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -89,5 +110,13 @@
 					</div>
         </main>
 		</div>
+
+
+		<script src="{{ mix('js/app.js') }}"></script>
+		<script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
+		@stack('scripts')
+
+		<script src="{{ asset('') }}other/jquery/jquery-3.4.1.min.js"></script>
+		@yield('script')
 </body>
 </html>

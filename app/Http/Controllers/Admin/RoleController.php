@@ -71,7 +71,15 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+					$roles = Role::orderBy('created_at', 'DESC')->paginate(10);
+					$edit = Role::findOrFail($id);
+					
+					return view('admin.roles.index', compact('roles','edit'));
+				} catch (\Exception $e) {
+					session()->flash('error', 'Terjadi Kesalahan !');
+					return redirect()->back();
+				}
     }
 
     /**

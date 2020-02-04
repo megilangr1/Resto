@@ -14,6 +14,12 @@
 Route::get('/', 'HomeController@index');
 
 Auth::routes(['register' => false]);
-
 Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('role', 'Admin\RoleController');
+
+Route::group(['middleware' => ['auth']], function () {
+	Route::group(['middleware' => ['role:Admin']], function () {	
+		Route::resource('role', 'Admin\RoleController');
+		Route::resource('user', 'Admin\UserController');
+		Route::resource('units', 'Master\UnitsController');
+	});
+});
