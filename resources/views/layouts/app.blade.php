@@ -56,6 +56,7 @@
 												</a>
 												<div class="dropdown-menu">
 													<a href="{{ route('units.index') }}" class="dropdown-item">Data Satuan</a>
+													<a href="{{ route('category.index') }}" class="dropdown-item">Data Kategori</a>
 													<div class="dropdown-divider"></div>
 												</div>
 											</li>

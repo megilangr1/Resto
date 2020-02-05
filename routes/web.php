@@ -21,5 +21,7 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::resource('role', 'Admin\RoleController');
 		Route::resource('user', 'Admin\UserController');
 		Route::resource('units', 'Master\UnitsController');
+		Route::resource('category', 'Master\CategoryController');
+		Route::resource('ingredients', 'Master\IngredientsController');
 	});
 });

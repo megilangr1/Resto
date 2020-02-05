@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\Category;
 use App\Http\Controllers\Controller;
-use App\Unit;
 use Illuminate\Http\Request;
 
-class UnitsController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,8 @@ class UnitsController extends Controller
      */
     public function index()
     {
-			$units = Unit::orderBy('created_at', 'DESC')->paginate(5); 
-			return view('units.index', compact('units'));
+			$categories = Category::orderBy('created_at', 'DESC')->paginate(5);
+      return view('category.index', compact('categories'));
     }
 
     /**
@@ -37,15 +37,15 @@ class UnitsController extends Controller
      */
     public function store(Request $request)
     {
-			$this->validate($request, [
+      $this->validate($request, [
 				'name' => 'required|string',
-				'short_name' => 'required|string'
+				'description' => 'nullable|string'
 			]);
 
 			try {
-				$units = Unit::firstOrCreate($request->except('_token'));
+				$categories =Category::firstOrCreate($request->except('_token'));
 				session()->flash('success', 'Berhasil Menambah Data Satuan !');
-				return redirect(route('units.index'));
+				return redirect(route('category.index'));
 			} catch (\Exception $e) {
 				session()->flash('error', 'Terjadi Kesalahan !');
 				return redirect()->back();
@@ -71,10 +71,10 @@ class UnitsController extends Controller
      */
     public function edit($id)
     {
-      try {
-				$edit = Unit::findOrFail($id);
-				$units = Unit::orderBy('created_at', 'DESC')->paginate(5);
-				return view('units.index', compact('edit', 'units'));
+			try {
+				$edit = Category::findOrFail($id);
+				$categories = Category::orderBy('created_at', 'DESC')->paginate(5);
+				return view('category.index', compact('edit', 'categories'));
 			} catch (\Exception $e) {
 				session()->flash('error', 'Terjadi Kesalahan !');
 				return redirect()->back();
@@ -92,15 +92,15 @@ class UnitsController extends Controller
     {
 			$this->validate($request, [
 				'name' => 'required|string',
-				'short_name' => 'required|string'
+				'description' => 'nullable|string'
 			]);
 
 			try {
-				$units = Unit::findOrFail($id);
-				$units->update($request->except('_token'));
+				$category = Category::findOrFail($id);
+				$category->update($request->except('_token'));
 
 				session()->flash('success', 'Berhasil Melakukan Perubahan Data !');
-				return redirect(route('units.index'));
+				return redirect(route('category.index'));
 			} catch (\Exception $e) {
 				session()->flash('error', 'Terjadi Kesalahan !');
 				return redirect()->back();
@@ -115,11 +115,11 @@ class UnitsController extends Controller
      */
     public function destroy($id)
     {
-			try {
-				$units = Unit::findOrFail($id);
-				$units->delete();
+      try {
+				$categories = Category::findOrFail($id);
+				$categories->delete();
 				session()->flash('success', 'Berhasil Menghapus Data !');
-				return redirect(route('units.index'));
+				return redirect(route('category.index'));
 			} catch (\Exception $th) {
 				session()->flash('error', 'Terjadi Kesalahan !');
 				return redirect()->back();
