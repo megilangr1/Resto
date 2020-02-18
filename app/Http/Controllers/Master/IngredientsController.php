@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Master;
 use App\DataTables\IngredientsDataTable;
 use App\Http\Controllers\Controller;
 use App\Ingredient;
+use App\StockIngredient;
 use App\Unit;
 use Illuminate\Http\Request;
 
@@ -46,8 +47,21 @@ class IngredientsController extends Controller
 					'unit_id' => 'required|string|exists:units,id'
 				]);
 
+				if ($request->stock_modal) {
+					$this->validate($request, [
+						'first_stock' => 'numeric|required|min:1',
+					]);
+				}
+
 				try {
-					$ingredients = Ingredient::firstOrCreate($request->except('_token'));
+					$ingredients = Ingredient::firstOrCreate($request->except('_token', 'stock_modal', 'first_stock'));
+					$stockIngredient = StockIngredient::firstOrCreate([
+						'ingredient_id' => $ingredients->id,
+						'first_stock' => $request->first_stock,
+						'stock_in' => 0,
+						'stock_out' => 0,
+						'stock_adjustment' => 0 
+					]);
 					session()->flash('success', 'Berhasil Menambah Data Bahan Pokok !');
 					return redirect(route('ingredients.index'));
 				} catch (\Exception $e) {
@@ -122,6 +136,10 @@ class IngredientsController extends Controller
     {
         try {
 					$ingredients = Ingredient::findOrFail($id);
+					// dd($ingredients->stock);
+					if ($ingredients->stock != null) {
+						StockIngredient::find($ingredients->stock->id)->delete();
+					}
 					$ingredients->delete();
 					session()->flash('success', 'Berhasil Menghapus Data Bahan Pokok !');
 					return redirect(route('ingredients.index'));

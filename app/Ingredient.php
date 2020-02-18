@@ -14,4 +14,9 @@ class Ingredient extends Model
 	{
 		return $this->belongsTo('App\Unit');
 	}
+
+	public function stock()
+	{
+		return $this->hasOne('App\StockIngredient');
+	}
 }

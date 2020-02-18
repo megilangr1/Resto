@@ -37,7 +37,7 @@
 							<select name="unit_id" id="unit_id" class="form-control select2 flat" data-placeholder="Pilih Satuan Bahan Pokok" style="width: 100%;">
 								<option value=""></option>
 								@foreach ($units as $item)
-										<option value="{{ $item->id }}" {{ old('unit_id') == $item->id ? 'selected':'' }}>{{ $item->name }} ({{ $item->short_name }})</option>
+										<option value="{{ $item->id }}" {{ old('unit_id') == $item->id ? 'selected':'' }} data-shortname="{{ $item->short_name }}">{{ $item->name }} ({{ $item->short_name }})</option>
 								@endforeach
 							</select>
 							<p class="text-danger">
@@ -50,7 +50,7 @@
 							<label for="">Harga Bahan Pokok : </label>
 							<div class="input-group">
 								<div class="input-group-prepend">
-									<span class="input-group-text" id="rp-addon" style="border-radius: 0px;">Rp.</span>
+									<span class="input-group-text flat" id="rp-addon">Rp.</span>
 								</div>
 								<input type="number" name="price" id="price" class="form-control flat {{ $errors->has('price') ? 'is-invalid':'' }}" min="0" required placeholder="Masukan Harga Bahan Pokok" value="{{ old('price') }}">
 							</div>
@@ -59,7 +59,7 @@
 							</p>
 						</div>
 					</div>
-					<div class="col-md-12">
+					<div class="col-md-6">
 						<div class="form-group">
 							<label for="">Deskripsi Bahan Pokok : </label>
 							<textarea name="description" id="description" cols="4" rows="4" class="form-control flat {{ $errors->has('description') ? 'is-invalid':'' }}" placeholder="Masukan Deskripsi Bahan Pokok">{{ old('description') }}</textarea>
@@ -68,11 +68,31 @@
 							</p>
 						</div>
 					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label for="">Opsional : </label>
+							<div class="form-check mb-2">
+								<input class="form-check-input" type="checkbox" value="1" name="stock_modal" id="stock_modal">
+								<label class="form-check-label" for="stock_modal">
+									Tambahkan Stok Modal
+								</label>
+							</div>
+							<div class="input-group stokInput" style="display: none;">
+								<div class="input-group-prepend">
+									<span class="input-group-text flat" id="rp-addon">Stok Modal :</span>
+								</div>
+								<input type="number" name="first_stock" id="first_stock" class="form-control flat {{ $errors->has('first_stock') ? 'is-invalid':'' }}" min="1" required placeholder="Masukan Stok Modal" value="{{ old('first_stock') }}">
+								<div class="input-group-prepend">
+									<span class="input-group-text flat" id="satuanModal"></span>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="col-md-12">
 						<button type="submit" class="btn flat btn-success">
 							Tambah Data Bahan Pokok
 						</button>
-						<button type="reset" class="btn flat btn-danger">
+						<button type="reset" class="btn flat btn-danger reset">
 							Reset Input
 						</button>
 					</div>
@@ -88,6 +108,24 @@
 	$(document).ready(function() {
 		$('.select2').select2();
 		$('#name').focus();
+
+		$('#unit_id').on('change', function() {
+			var a = $(this).find(':selected').data('shortname');
+			$('#satuanModal').text('(' + a + ')');
+		});
+
+		$('#stock_modal').on('change', function() {
+			$('#first_stock').val('0');
+			if ($('.stokInput').is(':visible')) {
+				$('.stokInput').hide();
+			} else {
+				$('.stokInput').show();
+			}
+		});
+
+		$('.reset').on('click', function() {
+			$('.stokInput').hide();			
+		});
 	});
 </script>
 @endsection
