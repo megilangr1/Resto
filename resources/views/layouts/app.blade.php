@@ -15,12 +15,39 @@
 
     <!-- Styles -->
 		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+		
+		<!-- Other -->
+		<link rel="stylesheet" href="{{ asset('') }}other/select2/css/select2.min.css">
 
 		<style>
 			.flat {
 				border-radius: 0px !important;
 			}
+
+			.table {
+				width: 100% !important;
+			}
+
+			.select2-container--default .select2-selection--single {
+				border-radius: 0px;
+				height: calc(1.6em + 0.75rem + 2px);
+			}
+
+			.select2-container--default .select2-selection--single .select2-selection__rendered {
+				line-height: 35px;
+			}
+			.select2-container .select2-selection--single .select2-selection__rendered {
+				padding-left: 0.75rem;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__arrow {
+				height: 35px;
+			}
+			.select2-dropdown {
+				border-radius: 0px;
+			}
 		</style>
+
+		@yield('css')
 </head>
 <body>
     <div id="app">
@@ -58,6 +85,7 @@
 													<a href="{{ route('units.index') }}" class="dropdown-item">Data Satuan</a>
 													<a href="{{ route('category.index') }}" class="dropdown-item">Data Kategori</a>
 													<div class="dropdown-divider"></div>
+													<a href="{{ route('ingredients.index') }}" class="dropdown-item">Bahan Pokok</a>
 												</div>
 											</li>
 											{{-- <li class="nav-item">
@@ -115,9 +143,12 @@
 
 		<script src="{{ mix('js/app.js') }}"></script>
 		<script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
-		@stack('scripts')
 
-		<script src="{{ asset('') }}other/jquery/jquery-3.4.1.min.js"></script>
+		@stack('scripts')
+		
+		<!-- Other -->
+		<script src="{{ asset('') }}other/select2/js/select2.full.min.js"></script>
+
 		@yield('script')
 </body>
 </html>

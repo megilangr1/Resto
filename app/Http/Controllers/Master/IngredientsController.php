@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Master;
 
+use App\DataTables\IngredientsDataTable;
 use App\Http\Controllers\Controller;
+use App\Ingredient;
+use App\Unit;
 use Illuminate\Http\Request;
 
 class IngredientsController extends Controller
@@ -12,9 +15,9 @@ class IngredientsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IngredientsDataTable $datatable)
     {
-        //
+        return $datatable->render('ingredient.index');
     }
 
     /**
@@ -24,7 +27,8 @@ class IngredientsController extends Controller
      */
     public function create()
     {
-        //
+				$units = Unit::orderBy('name')->get();
+        return view('ingredient.create', compact('units'));
     }
 
     /**
@@ -35,7 +39,22 @@ class IngredientsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+				$this->validate($request, [
+					'name' => 'required|string|max:191',
+					'description' => 'nullable|string',
+					'price' => 'required|numeric|min:0',
+					'unit_id' => 'required|string|exists:units,id'
+				]);
+
+				try {
+					$ingredients = Ingredient::firstOrCreate($request->except('_token'));
+					session()->flash('success', 'Berhasil Menambah Data Bahan Pokok !');
+					return redirect(route('ingredients.index'));
+				} catch (\Exception $e) {
+					session()->flash('error', 'Terjadi Kesalahan ! '.$e);
+					return redirect()->back();
+				}
+				dd($request->all());
     }
 
     /**
@@ -57,7 +76,13 @@ class IngredientsController extends Controller
      */
     public function edit($id)
     {
-        //
+				try {
+					$edit = Ingredient::findOrFail($id);
+					$units = Unit::orderBy('name')->get();
+					return view('ingredient.edit', compact('edit', 'units'));
+				} catch (\Exception $th) {
+					return redirect()->back();
+				}
     }
 
     /**
@@ -69,7 +94,22 @@ class IngredientsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+					'name' => 'required|string|max:191',
+					'description' => 'nullable|string',
+					'price' => 'required|numeric|min:0',
+					'unit_id' => 'required|string|exists:units,id'
+				]);
+
+				try {
+					$ingredients = Ingredient::findOrFail($id);
+					$ingredients->update($request->except('_token', '_method'));
+					session()->flash('success', 'Berhasil Mengubah Data Bahan Pokok !');
+					return redirect(route('ingredients.index'));
+				} catch (\Exception $e) {
+					session()->flash('error', 'Terjadi Kesalahan ! '.$e);
+					return redirect()->back();
+				}
     }
 
     /**
@@ -80,6 +120,14 @@ class IngredientsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+					$ingredients = Ingredient::findOrFail($id);
+					$ingredients->delete();
+					session()->flash('success', 'Berhasil Menghapus Data Bahan Pokok !');
+					return redirect(route('ingredients.index'));
+				} catch (\Exception $e) {
+					session()->flash('error', 'Terjadi Kesalahan ! '.$e);					
+					return redirect()->back();
+				}
     }
 }
