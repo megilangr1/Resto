@@ -84,6 +84,7 @@
 												<div class="dropdown-menu">
 													<a href="{{ route('units.index') }}" class="dropdown-item">Data Satuan</a>
 													<a href="{{ route('category.index') }}" class="dropdown-item">Data Kategori</a>
+													<a href="{{ route('suppliers.index') }}" class="dropdown-item">Data Supplier</a>
 													<div class="dropdown-divider"></div>
 													<a href="{{ route('ingredients.index') }}" class="dropdown-item">Bahan Pokok</a>
 												</div>

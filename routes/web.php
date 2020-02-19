@@ -23,5 +23,6 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::resource('units', 'Master\UnitsController');
 		Route::resource('category', 'Master\CategoryController');
 		Route::resource('ingredients', 'Master\IngredientsController');
+		Route::resource('suppliers', 'Master\SupplierController');
 	});
 });

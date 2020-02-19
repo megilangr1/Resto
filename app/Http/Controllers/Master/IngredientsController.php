@@ -136,7 +136,6 @@ class IngredientsController extends Controller
     {
         try {
 					$ingredients = Ingredient::findOrFail($id);
-					// dd($ingredients->stock);
 					if ($ingredients->stock != null) {
 						StockIngredient::find($ingredients->stock->id)->delete();
 					}
