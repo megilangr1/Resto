@@ -17,11 +17,11 @@ class CreatePurchaseHeadersTable extends Migration
 						$table->bigIncrements('id');
 						$table->date('purchase_date');
 						$table->unsignedBigInteger('supplier_id');
-						$table->foreign('supplier_id')->references('suppliers')->on('id');
+						$table->foreign('supplier_id')->references('id')->on('suppliers');
 						$table->string('purchase_status');
 						$table->double('total');
 						$table->unsignedBigInteger('user_id');
-						$table->foreign('user_id')->references('users')->on('id');
+						$table->foreign('user_id')->references('id')->on('users');
 						$table->timestamps();
         });
     }
