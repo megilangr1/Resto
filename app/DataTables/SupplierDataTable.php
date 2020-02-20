@@ -20,8 +20,25 @@ class SupplierDataTable extends DataTable
     public function dataTable($query)
     {
         return datatables()
-            ->eloquent($query)
-            ->addColumn('action', 'supplier.action');
+						->eloquent($query)
+						->addColumn('phone_number', function($query) {
+							return '(+62) '.$query->phone_number;
+						})
+						->addColumn('action', function($query) {
+							return '
+								<form action="'.route('suppliers.destroy', $query->id).'" method="post">
+									'.csrf_field().'
+									'.method_field('DELETE').'
+									<a href="'.route('suppliers.edit', $query->id).'" class="btn btn-warning btn-sm" style="margin:1px;">
+										Edit
+									</a>
+									<button type="submit" class="btn btn-danger btn-sm" style="margin:1px;">
+										Hapus
+									</button>
+								</form>
+							';
+						})
+						->rawColumns(['action']);
     }
 
     /**
@@ -58,9 +75,12 @@ class SupplierDataTable extends DataTable
     {
         return [
             Column::make('id'),
-            Column::make('name'),
-            Column::make('created_at'),
-						Column::make('updated_at'),
+						Column::make('name'),
+						Column::make('company_name'),
+						Column::make('phone_number'),
+						Column::make('address'),
+						Column::make('description')
+							->width('15%'),
 						Column::computed('action')
 							->exportable(false)
 							->printable(false)
